@@ -1,12 +1,34 @@
-import { StyleSheet, View, Text, Image } from "react-native";
+import React from "react";
+import "react-native-gesture-handler";
+import { StyleSheet, View, Text, Pressable } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 import Onboarding from "./components/onboarding/Onboarding";
+import Register from "./components/register/Register";
+
+const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <Onboarding />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Onboarding">
+        <Stack.Screen
+          name="Onboarding"
+          component={Onboarding}
+          options={{
+            header: () => null,
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{
+            header: () => null,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

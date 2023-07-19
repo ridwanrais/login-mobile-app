@@ -9,7 +9,7 @@ import SecondaryButton from "../buttons/SecondaryButton";
 
 import slides from "./slides";
 
-export default function Onboarding() {
+export default function Onboarding({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevButtonVisible, setPrevButtonVisible] = useState(false);
   const [nextButtonVisible, setNextButtonVisible] = useState(true);
@@ -22,23 +22,12 @@ export default function Onboarding() {
     setCurrentIndex(viewableItems[0].index);
   }).current;
 
-  const scrollNext = () => {
-    if (currentIndex < slides.length - 1) {
-      slidesRef.current.scrollToIndex({ index: currentIndex + 1 });
-    }
-  };
-
-  const scrollPrev = () => {
-    if (currentIndex > 0) {
-      slidesRef.current.scrollToIndex({ index: currentIndex - 1 });
-    }
-  };
-
   useEffect(() => {
     switch (currentIndex) {
       case 0:
         setPrevButtonVisible(false);
         setNextButtonVisible(true);
+        setShowSignupButtons(false);
         break;
       case slides.length - 1:
         setPrevButtonVisible(true);
@@ -52,6 +41,18 @@ export default function Onboarding() {
         break;
     }
   }, [currentIndex]);
+
+  const scrollNext = () => {
+    if (currentIndex < slides.length - 1) {
+      slidesRef.current.scrollToIndex({ index: currentIndex + 1 });
+    }
+  };
+
+  const scrollPrev = () => {
+    if (currentIndex > 0) {
+      slidesRef.current.scrollToIndex({ index: currentIndex - 1 });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -77,8 +78,13 @@ export default function Onboarding() {
       </View>
 
       <View style={[styles.buttons, { flex: 2 }]}>
-        {showSignupButtons &&  (<PrimaryButton text="Masuk" />)}
-        {showSignupButtons &&  (<SecondaryButton text="Mendaftar" />)}
+        {showSignupButtons && <PrimaryButton text="Masuk" />}
+        {showSignupButtons && (
+          <SecondaryButton
+            text="Mendaftar"
+            pressFunction={()=>{navigation.navigate("Register")}}
+          />
+        )}
       </View>
 
       <View style={[styles.paginatorContainer, { flex: 1 }]}>
