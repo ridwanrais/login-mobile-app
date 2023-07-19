@@ -42,3 +42,7 @@ To run the app locally on your development machine, follow these steps:
 
 If you have any questions, suggestions, or feedback, feel free to contact me at ridwan.rais2@gmail.com.
 
+
+---
+
+**Disclaimer:** This app is currently a work in progress. We are actively developing and improving its functionality. Please note that some features may be incomplete or subject to change. We appreciate your understanding and patience as we work towards providing a seamless and secure login experience for our users.
