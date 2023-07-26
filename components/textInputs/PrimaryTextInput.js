@@ -1,19 +1,52 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
-import { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
+import { StyleSheet, TextInput, Text, View } from "react-native"; // Import Text and View from react-native
+import EyeIcon from "../icons/EyeIcon";
 
-export default function PrimaryTextInput({ placeholder = 'default' }) {
-  const [name, SetName] = useState("");
+export default function PrimaryTextInput({
+  value,
+  onChangeText,
+  placeholder = "default",
+  isPassword = false,
+  isNewPassword = false,
+  isSecureTextEntry = false,
+  isEmail = false,
+  error = "", // New prop to hold the error message
+  style,
+}) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prevValue) => !prevValue);
+  };
 
   return (
+    <View style={[style, styles.container]}>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <TextInput
-        style={styles.input}
+        style={[styles.input, error ? styles.errorInput : null]}
         placeholder={placeholder}
-        onChangeText={(value) => SetName(value)}
+        value={value}
+        onChangeText={onChangeText}
+        {...(isNewPassword ? { autoComplete: "new-password" } : {})}
+        {...(isEmail ? { autoComplete: "email" } : {})}
+        secureTextEntry={isPasswordVisible}
       />
+      {isPassword ? (
+        <EyeIcon
+          style={styles.eyeIcon}
+          onPress={togglePasswordVisibility}
+          isVisible={isPasswordVisible}
+        />
+      ) : null}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+  },
   input: {
     width: "90%",
     height: 50,
@@ -21,9 +54,26 @@ const styles = StyleSheet.create({
     borderColor: "#555",
     borderRadius: 10,
     opacity: 0.5,
-    // textAlign: "center",
     paddingLeft: 15,
     fontSize: 17,
-    marginBottom: 15
+  },
+  errorInput: {
+    borderColor: "red",
+  },
+  errorText: {
+    left: 20,
+    alignSelf: "flex-start",
+    color: "red",
+    fontSize: 14,
+    top: -18,
+    marginBottom: 8,
+    position: "absolute",
+  },
+  eyeIcon: {
+    position: "absolute",
+    right: 30,
+    top: "50%", // Add this line to vertically center the icon
+    marginTop: -12, // Add this line to vertically center the icon
+    opacity: 0.5,
   },
 });

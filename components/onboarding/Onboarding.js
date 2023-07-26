@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, FlatList, Animated } from "react-native";
+import { View, StyleSheet, FlatList, Animated, useWindowDimensions } from "react-native";
 
 import OnboardingItem from "./OnboardingItem";
 import Paginator from "./Paginator";
@@ -10,6 +10,8 @@ import SecondaryButton from "../buttons/SecondaryButton";
 import slides from "./slides";
 
 export default function Onboarding({ navigation }) {
+  const { width } = useWindowDimensions();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [prevButtonVisible, setPrevButtonVisible] = useState(false);
   const [nextButtonVisible, setNextButtonVisible] = useState(true);
@@ -77,7 +79,7 @@ export default function Onboarding({ navigation }) {
         />
       </View>
 
-      <View style={[styles.buttons, { flex: 2 }]}>
+      <View style={[styles.buttons, { flex: 2, width: width * 0.9 }]}>
         {showSignupButtons && <PrimaryButton text="Masuk" />}
         {showSignupButtons && (
           <SecondaryButton
