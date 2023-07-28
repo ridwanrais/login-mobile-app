@@ -24,27 +24,80 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  const emptyFieldValidation = async (fieldName, value) => {
+    let errorMessage = "";
+
+    if (value === "") {
+      errorMessage = `${fieldName} can't be empty.`;
+    }
+
+    switch (fieldName) {
+      case "Name":
+        setNameError(errorMessage);
+        break;
+      case "Email":
+        setEmailError(errorMessage);
+        break;
+      case "Password":
+        setPasswordError(errorMessage);
+        break;
+      // case "Confirm Password":
+      //   setConfirmPasswordError(errorMessage);
+      //   break;
+    }
+  };
 
   const passwordValidation = async () => {
     // Check if password and confirmPassword are empty
-    if (password === '' || confirmPassword === '') {
-      setPasswordError('');
+    if (password === "" || confirmPassword === "") {
+      setPasswordError("");
       return;
     }
-  
+
     // Check if password matches confirmPassword
     if (password !== confirmPassword) {
       setPasswordError("Password does not match.");
-      return;
     } else {
       setPasswordError(""); // Reset the password error if passwords match
     }
   };
 
+  const emailValidation = async () => {
+    // Email validation using a regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email !== "" && !emailRegex.test(email)) {
+      setEmailError("Invalid email");
+    } else {
+      setEmailError(""); // Reset the password error if passwords match
+    }
+  };
+
   useEffect(() => {
     passwordValidation();
-  }, [password, confirmPassword])
+  }, [password, confirmPassword]);
+
+  useEffect(() => {
+    emailValidation();
+  }, [email]);
+
+  useEffect(() => {
+    // Enable or disable the button based on if there's any error
+    setIsButtonDisabled(
+      emailError !== "" ||
+        passwordError !== "" ||
+        name === "" ||
+        email === "" ||
+        password === "" ||
+        confirmPassword === ""
+    );
+  }, [name, email, password, confirmPassword, emailError, passwordError]);
 
   const handleRegister = async () => {
     console.log("name", name);
@@ -61,7 +114,9 @@ const Register = ({ navigation }) => {
       return;
     }
 
-    const url = "http://ec2-43-218-143-86.ap-southeast-3.compute.amazonaws.com:8080/api/v1/accounts";
+    // const url = "http://ec2-43-218-143-86.ap-southeast-3.compute.amazonaws.com:8080/api/v1/accounts";
+    const url =
+      "https://02429ca9-b7b3-474a-8f58-96d7f3ed4cd7.mock.pstmn.io/api/v1/accounts";
 
     const requestBody = {
       email: email,
@@ -82,18 +137,10 @@ const Register = ({ navigation }) => {
       const data = await response.json();
 
       if (data.error) {
-        Alert.alert(
-          "Error",
-          data.error
-        );
+        Alert.alert("Error", data.error);
       } else {
-        Alert.alert(
-          "Success",
-          "Registration Successful"
-        );
+        Alert.alert("Success", "Registration Successful");
       }
-
-      console.log('data', data);
 
       // Handle the response data as needed (e.g., show a success message or error)
       console.log(data);
@@ -110,13 +157,20 @@ const Register = ({ navigation }) => {
         <PrimaryTextInput
           style={[styles.textInput, { width }]}
           placeholder="Nama Lengkap"
-          onChangeText={(value) => setName(value)}
+          onChangeText={(value) => {
+            setName(value);
+            setNameError("");
+          }}
+          onBlur={() => emptyFieldValidation("Name", name)}
+          error={nameError}
         />
         <PrimaryTextInput
           style={[styles.textInput, { width }]}
           placeholder="Email"
           onChangeText={(value) => setEmail(value)}
+          onBlur={() => emptyFieldValidation("Email", email)}
           isEmail={true}
+          error={emailError}
         />
         <PrimaryTextInput
           style={[styles.textInput, { width }]}
@@ -129,6 +183,7 @@ const Register = ({ navigation }) => {
           onChangeText={(value) => {
             setPassword(value);
           }}
+          onBlur={() => emptyFieldValidation("Password", password)}
           isPassword={true}
           isNewPassword={true}
           error={passwordError}
@@ -138,8 +193,13 @@ const Register = ({ navigation }) => {
           placeholder="Konfirmasi Password"
           onChangeText={(value) => {
             setConfirmPassword(value);
+            setConfirmPasswordError("");
           }}
+          onBlur={() =>
+            emptyFieldValidation("Confirm Password", confirmPassword)
+          }
           isPassword={true}
+          error={confirmPasswordError}
         />
       </View>
       <View style={[styles.buttonContainer, { width: width * 0.9 }]}>
@@ -147,6 +207,7 @@ const Register = ({ navigation }) => {
           style={[styles.button]}
           text="Mendaftar"
           pressFunction={handleRegister}
+          disabled={isButtonDisabled}
         />
       </View>
       <Text style={styles.footer}>Sudah punya akun? silahkan masuk</Text>

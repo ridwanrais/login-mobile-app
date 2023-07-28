@@ -12,6 +12,7 @@ export default function PrimaryTextInput({
   isEmail = false,
   error = "", // New prop to hold the error message
   style,
+  onBlur,
 }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -30,7 +31,8 @@ export default function PrimaryTextInput({
         onChangeText={onChangeText}
         {...(isNewPassword ? { autoComplete: "new-password" } : {})}
         {...(isEmail ? { autoComplete: "email" } : {})}
-        secureTextEntry={isPasswordVisible}
+        secureTextEntry={!isPasswordVisible}
+        onBlur={onBlur}
       />
       {isPassword ? (
         <EyeIcon

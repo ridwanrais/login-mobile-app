@@ -7,7 +7,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-export default function PrimaryButton({ text = 'default', pressFunction }) {
+export default function PrimaryButton({ text = 'default', pressFunction, disabled = false }) {
   // const { width } = useWindowDimensions();
 
   return (
@@ -17,9 +17,10 @@ export default function PrimaryButton({ text = 'default', pressFunction }) {
       android_ripple={{ color: "#00f" }}
       style={({ pressed }) => [
         styles.container,
-        { backgroundColor: pressed ? "#ADD8E6" : "#3498DB" },
+        { backgroundColor: disabled ? "#ADD8E6" : pressed ? "#ADD8E6" : "#3498DB" },
         // { width: width * 0.9 },
       ]}
+      disabled={disabled}
     >
       <Text style={styles.text}>{text}</Text>
     </Pressable>
