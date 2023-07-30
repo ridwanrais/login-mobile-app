@@ -7,6 +7,7 @@ import {
   useWindowDimensions,
   ScrollView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
@@ -139,7 +140,8 @@ const Register = ({ navigation }) => {
       if (data.error) {
         Alert.alert("Error", data.error);
       } else {
-        Alert.alert("Success", "Registration Successful");
+        // Alert.alert("Success", "Registration Successful");
+        navigation.navigate("SuccessfulRegister");
       }
 
       // Handle the response data as needed (e.g., show a success message or error)
@@ -151,7 +153,11 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={[{ width, paddingVertical: 20 }]}>
+    <ScrollView
+      contentContainerStyle={[
+        { width, paddingVertical: 20, alignItems: "center" },
+      ]}
+    >
       <Image source={image} style={[styles.image, { resizeMode: "contain" }]} />
       <View style={styles.textInputContainer}>
         <PrimaryTextInput
@@ -210,7 +216,17 @@ const Register = ({ navigation }) => {
           disabled={isButtonDisabled}
         />
       </View>
-      <Text style={styles.footer}>Sudah punya akun? silahkan masuk</Text>
+      <View style={styles.footer}>
+        <Text>Sudah punya akun? silahkan</Text>
+        <TouchableOpacity
+          style={styles.registerLinkContainer}
+          onPress={() => {
+            navigation.replace("Login");
+          }}
+        >
+          <Text style={styles.registerLinkText}> masuk</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -245,7 +261,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   footer: {
+    flexDirection: "row",
     marginTop: 10,
-    textAlign: "center",
+    alignItems: "center",
+  },
+  registerLinkContainer: {},
+  registerLinkText: {
+    color: "#3498DB",
   },
 });

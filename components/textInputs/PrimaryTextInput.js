@@ -8,17 +8,16 @@ export default function PrimaryTextInput({
   placeholder = "default",
   isPassword = false,
   isNewPassword = false,
-  isSecureTextEntry = false,
   isEmail = false,
   error = "", // New prop to hold the error message
   style,
   onBlur,
 }) {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [textVisible, setTextVisible] = useState(!isPassword);
 
-  // Toggle password visibility
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prevValue) => !prevValue);
+  // Toggle text visibility
+  const toggleTextVisibility = () => {
+    setTextVisible((prevValue) => !prevValue);
   };
 
   return (
@@ -31,14 +30,14 @@ export default function PrimaryTextInput({
         onChangeText={onChangeText}
         {...(isNewPassword ? { autoComplete: "new-password" } : {})}
         {...(isEmail ? { autoComplete: "email" } : {})}
-        secureTextEntry={!isPasswordVisible}
+        secureTextEntry={!textVisible}
         onBlur={onBlur}
       />
       {isPassword ? (
         <EyeIcon
           style={styles.eyeIcon}
-          onPress={togglePasswordVisibility}
-          isVisible={isPasswordVisible}
+          onPress={toggleTextVisibility}
+          isVisible={textVisible}
         />
       ) : null}
     </View>
