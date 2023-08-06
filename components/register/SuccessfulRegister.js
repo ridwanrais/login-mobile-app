@@ -17,7 +17,7 @@ const SuccessfulRegister = ({ navigation }) => {
       <Image source={image} style={[styles.image, { resizeMode: "contain" }]} />
       <View style={styles.textContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Selamat!</Text>
+          {/* <Text style={styles.title}>Selamat!</Text> */}
           <Text style={styles.title}>Anda sudah berhasil mendaftar</Text>
         </View>
         <Text style={styles.description}>

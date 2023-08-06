@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
+import * as Linking from "expo-linking";
 
 import PrimaryTextInput from "../textInputs/PrimaryTextInput";
 import PrimaryButton from "../buttons/PrimaryButton";
@@ -49,9 +50,6 @@ const Register = ({ navigation }) => {
       case "Password":
         setPasswordError(errorMessage);
         break;
-      // case "Confirm Password":
-      //   setConfirmPasswordError(errorMessage);
-      //   break;
     }
   };
 
@@ -115,9 +113,9 @@ const Register = ({ navigation }) => {
       return;
     }
 
-    // const url = "http://ec2-43-218-143-86.ap-southeast-3.compute.amazonaws.com:8080/api/v1/accounts";
     const url =
-      "https://02429ca9-b7b3-474a-8f58-96d7f3ed4cd7.mock.pstmn.io/api/v1/accounts";
+      "http://ec2-43-218-143-86.ap-southeast-3.compute.amazonaws.com:8080/api/v1/accounts";
+    // const url ="https://02429ca9-b7b3-474a-8f58-96d7f3ed4cd7.mock.pstmn.io/api/v1/accounts";
 
     const requestBody = {
       email: email,
@@ -127,9 +125,13 @@ const Register = ({ navigation }) => {
     };
 
     try {
+      const link = Linking.createURL('/verify-account')
+      console.log('verfy base url: ' + link);
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
+          "Verify-Url": link,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(requestBody),
@@ -140,7 +142,6 @@ const Register = ({ navigation }) => {
       if (data.error) {
         Alert.alert("Error", data.error);
       } else {
-        // Alert.alert("Success", "Registration Successful");
         navigation.navigate("SuccessfulRegister");
       }
 
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   image: {
-    marginTop: 80,
+    marginTop: 40,
     marginBottom: 20,
     height: 300,
     alignSelf: "center",

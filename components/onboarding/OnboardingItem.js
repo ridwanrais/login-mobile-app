@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
     flex: 3,
     width: "90%",
     justifyContent: "center",
-    marginTop: 100,
+    marginTop: 40,
     marginBottom: 20,
+    height: 300,
   },
   title: {
     fontWeight: "800",

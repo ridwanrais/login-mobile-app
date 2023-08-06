@@ -27,6 +27,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "scheme": ["loginMobileApp"]
+    "scheme": "myapp"
   }
 }
